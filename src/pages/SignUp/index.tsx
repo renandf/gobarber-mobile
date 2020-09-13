@@ -4,9 +4,7 @@ import { Container } from './styles';
 
 const SignUp: React.FC = () => {
   return (
-    <Container>
-      Test
-    </Container>
+    <Container />
   )
 
 }
