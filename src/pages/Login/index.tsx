@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, ScrollView, Image, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -9,6 +16,8 @@ import logoImg from '../../assets/logo.png'
 import { Container, Title, ForgotPassword, ForgotPasswordText, CreateAccount, CreateAccountText } from './styles';
 
 const Login: React.FC = () => {
+  const navigation = useNavigation();
+
   return (
     <>
       <KeyboardAvoidingView
@@ -40,7 +49,7 @@ const Login: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <CreateAccount onPress={() => { }}>
+      <CreateAccount onPress={() => navigation.navigate('SignUp')}>
         <CreateAccountText>First timer? Sign up!</CreateAccountText>
       </CreateAccount>
     </>
