@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   View,
   ScrollView,
   Image,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -17,6 +21,12 @@ import { Container, Title, ForgotPassword, ForgotPasswordText, CreateAccount, Cr
 
 const Login: React.FC = () => {
   const navigation = useNavigation();
+  const formRef = useRef<FormHandles>(null);
+  const passwordInputRef = useRef<TextInput>(null);
+
+  const handleSignIn = useCallback((data: object) => {
+    console.log(data)
+  }, []);
 
   return (
     <>
@@ -36,10 +46,35 @@ const Login: React.FC = () => {
               <Title>Welcome back!</Title>
             </View>
 
-            <Input name="email" icon="mail" placeholder="Email" />
-            <Input name="password" icon="lock" placeholder="Password" />
+            <Form ref={formRef} onSubmit={handleSignIn}>
+              <Input
+                keyboardType="email-address"
+                name="email"
+                icon="mail"
+                placeholder="Email"
+                autoCorrect={false}
+                autoCapitalize="none"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus()
+                }}
+              />
+              <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                name="password"
+                icon="lock"
+                placeholder="Password"
+                returnKeyType="send"
+                onSubmitEditing={() => {
+                  formRef.current?.submitForm();
+                }}
+              />
 
-            <Button onPress={() => { console.log('foi') }}>Log in</Button>
+              <Button onPress={() => {
+                formRef.current?.submitForm();
+              }}>Log in</Button>
+            </Form>
 
             <ForgotPassword onPress={() => { }}>
               <ForgotPasswordText>Forgot password</ForgotPasswordText>

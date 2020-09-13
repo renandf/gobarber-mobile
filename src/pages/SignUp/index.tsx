@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   View,
   ScrollView,
   Image,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TextInput
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -18,6 +21,9 @@ import { Container, Title, LinkToLogin, LinkToLoginText } from './styles';
 
 const SignUp: React.FC = () => {
   const navigation = useNavigation();
+  const formRef = useRef<FormHandles>(null);
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
   return (
     <>
@@ -37,11 +43,49 @@ const SignUp: React.FC = () => {
               <Title>Welcome back!</Title>
             </View>
 
-            <Input name="name" icon="user" placeholder="Name" />
-            <Input name="email" icon="mail" placeholder="Email" />
-            <Input name="password" icon="lock" placeholder="Password" />
+            <Form ref={formRef} onSubmit={(data) => {
+              console.log(data);
+            }}>
+              <Input
+                name="name"
+                icon="user"
+                placeholder="Name"
+                autoCapitalize="words"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  emailInputRef.current?.focus()
+                }}
+              />
+              <Input
+                ref={emailInputRef}
+                keyboardType="email-address"
+                name="email"
+                icon="mail"
+                placeholder="Email"
+                autoCorrect={false}
+                autoCapitalize="none"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus()
+                }}
+              />
+              <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                name="password"
+                icon="lock"
+                placeholder="Password"
+                textContentType="newPassword"
+                returnKeyType="send"
+                onSubmitEditing={() => {
+                  formRef.current?.submitForm();
+                }}
+              />
 
-            <Button onPress={() => { console.log('foi') }}>Register</Button>
+              <Button onPress={() => {
+                formRef.current?.submitForm();
+              }}>Register</Button>
+            </Form>
 
           </Container>
         </ScrollView>
