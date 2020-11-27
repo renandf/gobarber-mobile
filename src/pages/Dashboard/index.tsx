@@ -16,6 +16,7 @@ import {
   AvatarPlaceholder,
   AvatarPlaceholderText,
   ProvidersList,
+  ProvidersListHeader,
   ProvidersListTitle,
   ProviderContainer,
   ProviderAvatar,
@@ -75,7 +76,18 @@ const Dashboard: React.FC = () => {
         data={providers}
         keyExtractor={provider => provider.id}
         ListHeaderComponent={
-          <ProvidersListTitle>Barbers</ProvidersListTitle>
+          <ProvidersListHeader>
+            <ProvidersListTitle>Barbers</ProvidersListTitle>
+            <ProviderMeta>
+              <Icon name="calendar" size={14} color="#ff9000" />
+              <ProviderMetaText>Monday to Friday</ProviderMetaText>
+            </ProviderMeta>
+
+            <ProviderMeta>
+              <Icon name="clock" size={14} color="#ff9000" />
+              <ProviderMetaText>Between 8:00 and 18:00</ProviderMetaText>
+            </ProviderMeta>
+          </ ProvidersListHeader>
         }
         renderItem={({ item: provider }) => (
           <ProviderContainer onPress={
@@ -93,16 +105,6 @@ const Dashboard: React.FC = () => {
 
             <ProviderInfo>
               <ProviderName>{provider.name}</ProviderName>
-
-              <ProviderMeta>
-                <Icon name="calendar" size={14} color="#ff9000" />
-                <ProviderMetaText>Monday to Friday</ProviderMetaText>
-              </ProviderMeta>
-
-              <ProviderMeta>
-                <Icon name="clock" size={14} color="#ff9000" />
-                <ProviderMetaText>Between 8:00 and 18:00</ProviderMetaText>
-              </ProviderMeta>
             </ProviderInfo>
           </ProviderContainer>
         )

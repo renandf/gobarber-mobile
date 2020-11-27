@@ -66,11 +66,14 @@ export const ProvidersList = styled(
   padding: 32px 24px 16px;
 `;
 
+export const ProvidersListHeader = styled.View`
+  margin-bottom: 24px;
+`;
+
 export const ProvidersListTitle = styled.Text`
   font-family: 'RobotoSlab-Medium';
   font-size: 24px;
   color: #f4ede8;
-  margin-bottom: 24px;
 `;
 
 export const ProviderContainer = styled(RectButton)`
@@ -78,7 +81,7 @@ export const ProviderContainer = styled(RectButton)`
   align-items: center;
   background: #3f384f;
   border-radius: 10px;
-  padding: 16px;
+  padding: 8px 16px;
   margin-bottom: 16px;
 `;
 
