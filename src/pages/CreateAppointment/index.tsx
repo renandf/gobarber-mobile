@@ -1,8 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 
 import { useAuth } from '../../hooks/auth';
+import api from '../../services/api';
+
+import { Provider } from '../Dashboard/index';
 
 import {
   Container,
@@ -11,7 +14,13 @@ import {
   BackButton,
   UserAvatar,
   AvatarPlaceholder,
+  AvatarPlaceholderSmall,
   AvatarPlaceholderText,
+  ProvidersListContainer,
+  ProvidersList,
+  ProviderContainer,
+  ProviderAvatar,
+  ProviderName,
 } from './styles';
 
 interface RouteParams {
@@ -22,11 +31,24 @@ const CreateAppointment: React.FC = () => {
   const { user } = useAuth();
   const route = useRoute();
   const { goBack } = useNavigation();
-  const { providerId } = route.params as RouteParams;
+  const routeParams = route.params as RouteParams;
+
+  const [providers, setProviders] = useState<Provider[]>([]);
+  const [selectedProvider, setSelectedProvider] = useState(routeParams.providerId);
+
+  useEffect(() => {
+    api.get('providers').then(response => {
+      setProviders(response.data);
+    });
+  }, []);
 
   const navigateBack = useCallback(() => {
     goBack();
   }, [goBack]);
+
+  const handleSelectProvider = useCallback((providerId: string) => {
+    setSelectedProvider(providerId);
+  }, [])
 
   return (
     <Container>
@@ -46,6 +68,35 @@ const CreateAppointment: React.FC = () => {
           </AvatarPlaceholder>
         }
       </Header>
+
+      <ProvidersListContainer>
+        <ProvidersList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={providers}
+          keyExtractor={provider => provider.id}
+          renderItem={({ item: provider }) => (
+            <ProviderContainer
+              onPress={() => handleSelectProvider(provider.id)}
+              selected={provider.id === selectedProvider}
+            >
+              {
+                provider.avatar_url
+                  ? <ProviderAvatar source={{ uri: provider.avatar_url }} />
+                  : <AvatarPlaceholderSmall>
+                    <AvatarPlaceholderText>
+                      {provider.name.charAt(0)}
+                    </AvatarPlaceholderText>
+                  </AvatarPlaceholderSmall>
+              }
+              <ProviderName selected={provider.id === selectedProvider}>
+                {provider.name}
+              </ProviderName>
+            </ProviderContainer>
+          )}
+        />
+      </ProvidersListContainer>
+
     </Container>
   )
 }

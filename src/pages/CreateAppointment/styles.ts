@@ -1,5 +1,17 @@
 import styled from 'styled-components/native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { FlatList } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
+
+import { Provider } from '../Dashboard/index';
+
+interface ProviderContainerProps {
+  selected: boolean;
+}
+
+interface ProviderNameProps {
+  selected: boolean;
+}
 
 export const Container = styled.View`
   flex: 1;
@@ -46,9 +58,53 @@ export const AvatarPlaceholder = styled.View`
   align-items: center;
 `;
 
+export const AvatarPlaceholderSmall = styled.View`
+  width: 34px;
+  height: 34px;
+  border-radius: 17px;
+  border-width: 2px;
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.15);
+  justify-content: center;
+  align-items: center;
+`;
+
 export const AvatarPlaceholderText = styled.Text`
   font-family: 'RobotoSlab-Medium';
   color: #f4ede8;
   text-transform: uppercase;
 `;
 
+export const ProvidersListContainer = styled.View`
+  height: 112px;
+`;
+
+export const ProvidersList = styled(
+  FlatList as new () => FlatList<Provider>
+)`
+  padding: 32px 24px;
+`;
+
+export const ProviderContainer = styled(RectButton) <ProviderContainerProps>`
+  flex-direction: row;
+  align-items: center;
+  background: ${props => props.selected ? '#ff9900' : '#3f384f'};
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-right: 8px;
+`;
+
+export const ProviderAvatar = styled.Image`
+  width: 34px;
+  height: 34px;
+  border-radius: 17px;
+  border-width: 2px;
+  border-color: rgba(255,255,255,0.15);
+`;
+
+export const ProviderName = styled.Text<ProviderNameProps>`
+  font-family: 'RobotoSlab-Regular';
+  font-size: 16px;
+  color: ${props => props.selected ? '#232129' : '#f4ede8'};
+  margin-left: 8px;
+`;
