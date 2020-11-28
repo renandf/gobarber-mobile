@@ -138,24 +138,41 @@ const CreateAppointment: React.FC = () => {
 
   const handleCreateAppointment = useCallback(async () => {
     try {
+      const provider = providers.find(
+        provider => provider.id === selectedProvider
+      );
       const date = new Date(selectedDate);
 
       date.setHours(selectedHour);
       date.setMinutes(0);
+
+      const dateFormatted = format(date, "EEEE', 'dd MMM yyyy");
 
       await api.post('appointments', {
         provider_id: selectedProvider,
         date,
       });
 
-      navigate('AppointmentCreated', { date: date.getTime() })
+      navigate('AppointmentCreated', {
+        date: dateFormatted,
+        hour: selectedHourAsText,
+        provider: provider?.name,
+
+      })
     } catch (err) {
       Alert.alert(
         'Something went wrong.',
         'There was an error while booking your appointment, please try again later.'
       )
     }
-  }, [navigate, selectedDate, selectedHour, selectedProvider]);
+  }, [
+    navigate,
+    selectedDate,
+    selectedDateAsText,
+    selectedHour,
+    selectedHourAsText,
+    selectedProvider,
+  ]);
 
   return (
     <Container>
