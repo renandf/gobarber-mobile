@@ -22,12 +22,13 @@ import Button from '../../components/Button';
 
 import {
   Container,
+  Nav,
   BackButton,
+  SignOutButton,
   Title,
   UserAvatarButton,
   UserAvatar,
   AvatarPlaceholder,
-  AvatarPlaceholderText,
 } from './styles';
 
 interface ProfileFormData {
@@ -39,7 +40,7 @@ interface ProfileFormData {
 }
 
 const Profile: React.FC = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, signOut } = useAuth();
 
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
@@ -96,7 +97,7 @@ const Profile: React.FC = () => {
 
       updateUser(response.data);
 
-      navigation.goBack()
+      navigation.goBack();
 
       Alert.alert('Profile updated successfully');
     } catch (err) {
@@ -136,17 +137,20 @@ const Profile: React.FC = () => {
           contentContainerStyle={{ flex: 1 }}
         >
           <Container>
-            <BackButton onPress={handleGoBack}>
-              <Icon name="chevron-left" size={24} color="#999591" />
-            </BackButton>
+            <Nav>
+              <BackButton onPress={handleGoBack}>
+                <Icon name="chevron-left" size={24} color="#999591" />
+              </BackButton>
+              <SignOutButton onPress={signOut}>
+                <Icon name="log-out" size={24} color="#999591" />
+              </SignOutButton>
+            </Nav>
 
             <UserAvatarButton onPress={() => { }}>
               {user.avatar_url
                 ? <UserAvatar source={{ uri: user.avatar_url }} />
                 : <AvatarPlaceholder>
-                  <AvatarPlaceholderText>
-                    {user.name.charAt(0)}
-                  </AvatarPlaceholderText>
+                  <Icon name="camera" size={20} color="#ff9900" />
                 </AvatarPlaceholder>
               }
             </UserAvatarButton>

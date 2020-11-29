@@ -7,9 +7,15 @@ export const Container = styled.View`
   padding: 0 32px ${Platform.OS === 'android' ? 150 : 80}px;
 `;
 
-export const BackButton = styled.TouchableOpacity`
+export const Nav = styled.View`
   margin-top: 40px;
+  flex-direction: row;
+  justify-content: space-between;
 `;
+
+export const BackButton = styled.TouchableOpacity``;
+
+export const SignOutButton = styled.TouchableOpacity``;
 
 export const Title = styled.Text`
   font-family: 'RobotoSlab-Medium';
@@ -20,6 +26,7 @@ export const Title = styled.Text`
 
 export const UserAvatarButton = styled.TouchableOpacity`
   margin-top: 8px;
+  align-items: center;
 `;
 
 export const UserAvatar = styled.Image`
@@ -28,7 +35,6 @@ export const UserAvatar = styled.Image`
   border-radius: 80px;
   border-width: 2px;
   border-color: #3f384f;
-  align-self: center;
 `;
 
 export const AvatarPlaceholder = styled.View`
@@ -37,14 +43,8 @@ export const AvatarPlaceholder = styled.View`
   border-radius: 80px;
   border-width: 2px;
   border-color: #3f384f;
-  background: rgba(255,255,255,0.15);
+  background: #3f384f;
   justify-content: center;
   align-items: center;
 `;
 
-export const AvatarPlaceholderText = styled.Text`
-  font-family: 'RobotoSlab-Regular';
-  font-size: 20px;
-  color: #f4ede8;
-  text-transform: uppercase;
-`;
