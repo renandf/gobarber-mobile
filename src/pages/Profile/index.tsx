@@ -12,6 +12,7 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 import Icon from 'react-native-vector-icons/Feather';
+import ImagePicker from 'react-native-image-picker';
 
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
@@ -119,7 +120,35 @@ const Profile: React.FC = () => {
         'Something went wrong. Please try to update your profile again.'
       );
     }
-  }, [navigation]);
+  }, [navigation, updateUser]);
+
+  const handleUpdateAvatar = useCallback(() => {
+    ImagePicker.showImagePicker({
+      title: 'Select a picture as your avatar',
+    }, response => {
+      if (response.didCancel) {
+        return;
+      }
+
+      if (response.error) {
+        Alert.alert('Something went wrong when uploading a picture. Please try again later.');
+        return;
+      }
+
+      const data = new FormData();
+
+      data.append('avatar', {
+        type: 'image/jpeg',
+        name: `${user.id}.jpg`,
+        uri: response.uri,
+      });
+
+      api.patch('users/avatar', data).then(res => {
+        updateUser(res.data);
+      });
+
+    });
+  }, [updateUser, user.id]);
 
   const handleGoBack = useCallback(() => {
     navigation.goBack();
@@ -146,7 +175,7 @@ const Profile: React.FC = () => {
               </SignOutButton>
             </Nav>
 
-            <UserAvatarButton onPress={() => { }}>
+            <UserAvatarButton onPress={handleUpdateAvatar}>
               {user.avatar_url
                 ? <UserAvatar source={{ uri: user.avatar_url }} />
                 : <AvatarPlaceholder>
