@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Platform, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { format } from 'date-fns';
+import { format, isWeekend, isPast } from 'date-fns';
 import Icon from 'react-native-vector-icons/Feather';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -138,6 +138,13 @@ const CreateAppointment: React.FC = () => {
 
   const handleCreateAppointment = useCallback(async () => {
     try {
+      if (isWeekend(selectedDate) || isPast(selectedDate)) {
+        throw Alert.alert(
+          'Invalid date',
+          'Appointments cannot be made on weekends or dates in the past.'
+        )
+      }
+
       const provider = providers.find(
         provider => provider.id === selectedProvider
       );
@@ -161,7 +168,7 @@ const CreateAppointment: React.FC = () => {
       })
     } catch (err) {
       Alert.alert(
-        'Something went wrong.',
+        'Something went wrong',
         'There was an error while booking your appointment, please try again later.'
       )
     }
@@ -238,51 +245,54 @@ const CreateAppointment: React.FC = () => {
           )}
         </Calendar>
 
-        <Schedule>
-          <Section>
-            <SectionTitle>Morning (select a time)</SectionTitle>
+        {isWeekend(selectedDate) || isPast(selectedDate)
+          ? <SectionTitle>No availability on weekends or dates in the past</SectionTitle>
+          : <Schedule>
+            <Section>
+              <SectionTitle>Morning (select a time)</SectionTitle>
 
-            <SectionContent>
-              {morningAvailability.map(({
-                hourFormatted, hour, available
-              }) => (
-                  <Hour
-                    available={available}
-                    enabled={available}
-                    selected={selectedHour === hour}
-                    key={hourFormatted}
-                    onPress={() => handleSelectHour(hour)}
-                  >
-                    <HourText selected={selectedHour === hour}>
-                      {hourFormatted}
-                    </HourText>
-                  </Hour>
-                ))}
-            </SectionContent>
-          </Section>
+              <SectionContent>
+                {morningAvailability.map(({
+                  hourFormatted, hour, available
+                }) => (
+                    <Hour
+                      available={available}
+                      enabled={available}
+                      selected={selectedHour === hour}
+                      key={hourFormatted}
+                      onPress={() => handleSelectHour(hour)}
+                    >
+                      <HourText selected={selectedHour === hour}>
+                        {hourFormatted}
+                      </HourText>
+                    </Hour>
+                  ))}
+              </SectionContent>
+            </Section>
 
-          <Section>
-            <SectionTitle>Afternoon (select a time)</SectionTitle>
+            <Section>
+              <SectionTitle>Afternoon (select a time)</SectionTitle>
 
-            <SectionContent>
-              {afternoonAvailability.map(({
-                hourFormatted, hour, available
-              }) => (
-                  <Hour
-                    available={available}
-                    enabled={available}
-                    selected={selectedHour === hour}
-                    key={hourFormatted}
-                    onPress={() => handleSelectHour(hour)}
-                  >
-                    <HourText selected={selectedHour === hour}>
-                      {hourFormatted}
-                    </HourText>
-                  </Hour>
-                ))}
-            </SectionContent>
-          </Section>
-        </Schedule>
+              <SectionContent>
+                {afternoonAvailability.map(({
+                  hourFormatted, hour, available
+                }) => (
+                    <Hour
+                      available={available}
+                      enabled={available}
+                      selected={selectedHour === hour}
+                      key={hourFormatted}
+                      onPress={() => handleSelectHour(hour)}
+                    >
+                      <HourText selected={selectedHour === hour}>
+                        {hourFormatted}
+                      </HourText>
+                    </Hour>
+                  ))}
+              </SectionContent>
+            </Section>
+          </Schedule>
+        }
 
         {!!selectedHour &&
           <CreateAppointmentButton onPress={handleCreateAppointment}>

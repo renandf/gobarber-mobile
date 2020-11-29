@@ -141,15 +141,13 @@ export const Schedule = styled.View`
   padding: 24px 0 16px;
 `;
 
-export const Section = styled.View`
-  margin-bottom: 24px;
-`;
+export const Section = styled.View``;
 
 export const SectionTitle = styled.Text`
   font-family: 'RobotoSlab-Regular';
   font-size: 18px;
   color: #999591;
-  margin: 0 24px 12px;
+  margin: 24px 24px 12px;
 `;
 
 export const SectionContent = styled.ScrollView.attrs({
@@ -179,7 +177,7 @@ export const CreateAppointmentButton = styled(RectButton)`
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  margin: 0 24px 24px;
+  margin: 32px 24px;
 `;
 
 export const CreateAppointmentButtonText = styled.Text`
